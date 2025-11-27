@@ -1,0 +1,153 @@
+let memberList1 = [
+  {
+    memberCode: "M001",
+    serial: "1",
+    isRepresentative: true,
+    ownerName: "조원영",
+    nameType: "A",
+    address: "원효로1가 4-3 101동 201호",
+    ownerContact: "010-3923-6162",
+  },
+  {
+    memberCode: "M002",
+    serial: "2",
+    isRepresentative: false,
+    ownerName: "김철수",
+    nameType: null,
+    address: "남천동 148-9 101동 607호",
+    ownerContact: "010-2345-6789",
+  },
+  {
+    memberCode: "M003",
+    serial: "3",
+    isRepresentative: false,
+    ownerName: "이영희",
+    nameType: "A",
+    address: "서초동 12-5 201동 303호",
+    ownerContact: "010-3456-7890",
+  },
+  {
+    memberCode: "M004",
+    serial: "2-1",
+    isRepresentative: true,
+    ownerName: "박민수",
+    nameType: "A",
+    address: "원효로1가 4-3 101동 201호",
+    ownerContact: "010-4567-8901",
+  },
+  {
+    memberCode: "M005",
+    serial: "2-2",
+    isRepresentative: false,
+    ownerName: "최수정",
+    nameType: null,
+    address: "원효로1가 4-3 101동 201호",
+    ownerContact: "010-5678-9012",
+  },
+  {
+    memberCode: "M006",
+    serial: "2-3",
+    isRepresentative: false,
+    ownerName: "정호진",
+    nameType: "A",
+    address: "원효로1가 4-3 101동 201호",
+    ownerContact: "010-6789-0123",
+  },
+];
+
+let memberList2 = [
+  {
+    memberCode: "M007",
+    serial: "1",
+    isRepresentative: true,
+    ownerName: "강민준",
+    nameType: "A",
+    address: "성수동 23-4 102동 301호",
+    ownerContact: "010-1111-2222",
+  },
+  {
+    memberCode: "M008",
+    serial: "2",
+    isRepresentative: false,
+    ownerName: "한지은",
+    nameType: null,
+    address: "성수동 23-4 102동 302호",
+    ownerContact: "010-3333-4444",
+  },
+];
+
+let memberList3 = [
+  {
+    memberCode: "M009",
+    serial: "1",
+    isRepresentative: true,
+    ownerName: "오세훈",
+    nameType: "A",
+    address: "압구정동 5-12 201동 101호",
+    ownerContact: "010-5555-6666",
+  },
+  {
+    memberCode: "M010",
+    serial: "2-1",
+    isRepresentative: false,
+    ownerName: "윤서연",
+    nameType: null,
+    address: "압구정동 5-12 201동 101호",
+    ownerContact: "010-7777-8888",
+  },
+  {
+    memberCode: "M011",
+    serial: "2-2",
+    isRepresentative: false,
+    ownerName: "김동현",
+    nameType: "A",
+    address: "압구정동 5-12 201동 101호",
+    ownerContact: "010-9999-0000",
+  },
+];
+
+let memberList4 = [
+  {
+    memberCode: "M012",
+    serial: "1",
+    isRepresentative: true,
+    ownerName: "이수빈",
+    nameType: "A",
+    address: "논현동 78-3 103동 402호",
+    ownerContact: "010-2468-1357",
+  },
+  {
+    memberCode: "M013",
+    serial: "2",
+    isRepresentative: false,
+    ownerName: "조민지",
+    nameType: null,
+    address: "논현동 78-3 103동 403호",
+    ownerContact: "010-1357-2468",
+  },
+  {
+    memberCode: "M014",
+    serial: "3",
+    isRepresentative: false,
+    ownerName: "김재원",
+    nameType: "A",
+    address: "논현동 78-3 103동 404호",
+    ownerContact: "010-9753-8642",
+  },
+  {
+    memberCode: "M015",
+    serial: "4",
+    isRepresentative: false,
+    ownerName: "박세라",
+    nameType: null,
+    address: "논현동 78-3 103동 405호",
+    ownerContact: "010-8642-9753",
+  },
+];
+
+module.exports = {
+  memberList1,
+  memberList2,
+  memberList3,
+  memberList4,
+};
