@@ -106,47 +106,47 @@ app.get("/api/member-list", (req, res) => {
   res.json(selectedList);
 });
 
-app.get("/api/test/:id", (req, res) => {
-  const { id } = req.params;
+app.get("/api/member-list/:memberCode", (req, res) => {
+  const { memberCode } = req.params;
 
-  if (id === "1") {
+  if (memberCode === "M001") {
     res.json({
-      roleType: "조합원",
-      memberId: "1",
-      position: "대표",
-      name: "송기영",
-      phoneNumber: "821048542974",
-      friendliness: "부정",
-      officeLocation: "하늘팰리스트아파트 102동 1004호",
-      residence: "서울특별시 서초구 강남동 하늘팰리스트아파트 102동 1004호",
-      ownershipType: "단독",
-      affiliation: "우리가 1구역 재개발 조합",
-      birthDate: "1989-05-20",
-      extraPhone1: "821012345678",
-      extraPhone2: "821087654321",
-      note1: "비고1",
-      note2: "비고2",
+      memberCode: "M001",
+      serial: "1",
+      isRepresentative: true,
+      ownerName: "조원영",
+      nameType: "A",
+      address: "원효로1가 4-3 101동 201호",
+      ownerContact: "010-3923-6162",
+      position: "대표", // 직책
+      actualResidence: "원효로1가 4-3", // 실거주지
+      extraContacts: ["010-1111-1111", "010-2222-2222"], // 기타 연락처
+      addresses: ["원효로1가 4-3 101동 201호", "마포구 3가 101동 202호"], // 소재지 n건
+      birthDate: "1990-01-01", // 생년월일
+      ownershipType: "단독", // 소유구분
+      gender: "여자",
+      favorability: "긍정",
     });
-  } else if (id === "2") {
+  } else if (memberCode === "M002") {
     res.json({
-      roleType: "대리인",
-      memberId: "2",
-      position: "대표",
-      name: "조원영",
-      phoneNumber: "821039236162",
-      friendliness: "부정",
-      officeLocation: "하늘팰리스트아파트 102동 1004호",
-      residence: "서울특별시 서초구 강남동 하늘팰리스트아파트 102동 1004호",
-      ownershipType: "단독",
-      affiliation: "우리가 1구역 재개발 조합",
-      birthDate: "1989-05-20",
-      extraPhone1: "821012345678",
-      extraPhone2: "821087654321",
-      note1: "비고1",
-      note2: "비고2",
+      memberCode: "M002",
+      serial: "2",
+      isRepresentative: false,
+      ownerName: "김철수",
+      nameType: null,
+      address: "남천동 148-9 101동 607호",
+      ownerContact: "010-2345-6789",
+      position: "부대표",
+      actualResidence: "남천동 148-9",
+      extraContacts: ["010-3333-3333"],
+      addresses: ["남천동 148-9 101동 607호"],
+      birthDate: "1985-07-12", // 생년월일
+      ownershipType: "공동",
+      gender: "남자",
+      favorability: "부젇",
     });
   } else {
-    res.status(404).json({ message: "멤버를 찾을 수 없습니다." });
+    res.status(404).json({ message: "해당 멤버를 찾을 수 없습니다." });
   }
 });
 
