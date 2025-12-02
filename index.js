@@ -25,7 +25,8 @@ app.use(cors());
 let consultList = [
   {
     roleType: "조합원",
-    memberId: "1",
+    serial: "2",
+    memberCode: "M002",
     position: "대표",
     name: "송기영",
     phoneNumber: "821048542974",
@@ -41,7 +42,8 @@ let consultList = [
   },
   {
     roleType: "대리인",
-    memberId: "2",
+    serial: "1",
+    memberCode: "M001",
     position: "대표",
     name: "조원영",
     phoneNumber: "821039236162",
