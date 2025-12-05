@@ -13,6 +13,11 @@ const {
   memberList3,
   memberList4,
 } = require("./member.js");
+const {
+  consultList1,
+  consultDetail1,
+  consultDetail2,
+} = require("./consult.js");
 const express = require("express");
 const cors = require("cors");
 
@@ -21,43 +26,6 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use(cors());
-
-let consultList = [
-  {
-    roleType: "조합원",
-    serial: "2",
-    memberCode: "M002",
-    position: "대표",
-    name: "송기영",
-    phoneNumber: "821048542974",
-    friendliness: "부정",
-    officeLocation: "하늘팰리스트아파트 102동 1004호",
-    residence: "서울특별시 서초구 강남동 하늘팰리스트아파트 102동 1004호",
-    consultId: "consult1",
-    consultationDate: "2025-01-14T13:30:00",
-    submission: "제출",
-    category: "카테고리1",
-    nextConsultationDate: "2025-01-15T13:30:00",
-    content: "내용 상담 내용 상담내용",
-  },
-  {
-    roleType: "대리인",
-    serial: "1",
-    memberCode: "M001",
-    position: "대표",
-    name: "조원영",
-    phoneNumber: "821039236162",
-    friendliness: "중립",
-    officeLocation: "하늘팰리스트아파트 102동 1004호",
-    residence: "서울특별시 서초구 강남동 하늘팰리스트아파트 102동 1004호",
-    consultId: "consult2",
-    consultationDate: "2025-01-16T10:00:00",
-    submission: "미제출",
-    category: "카테고리2",
-    nextConsultationDate: "2025-01-20T14:00:00",
-    content: "상담 내용 더미 데이터입니다.",
-  },
-];
 
 let regionList = [
   {
@@ -72,6 +40,24 @@ let regionList = [
 
 app.get("/", (req, res) => {
   res.send("Express test server is running!");
+});
+
+app.post("/api/test", (req, res) => {
+  const { label, phone } = req.body;
+
+  if (!label || !phone) {
+    return res.status(400).json({ message: "label과 phone은 필수입니다." });
+  }
+
+  const exists = dataList.some((item) => item.phone === phone);
+  if (exists) {
+    return res.status(409).json({ message: "이미 존재하는 phone입니다." });
+  }
+
+  const newData = { label, phone };
+  dataList.push(newData);
+
+  res.status(201).json(newData);
 });
 
 // 구역 리스트
@@ -108,6 +94,7 @@ app.get("/api/member-list", (req, res) => {
   res.json(selectedList);
 });
 
+// 멤버 상세
 app.get("/api/member-list/:memberCode", (req, res) => {
   const { memberCode } = req.params;
 
@@ -152,27 +139,21 @@ app.get("/api/member-list/:memberCode", (req, res) => {
   }
 });
 
-app.post("/api/test", (req, res) => {
-  const { label, phone } = req.body;
-
-  if (!label || !phone) {
-    return res.status(400).json({ message: "label과 phone은 필수입니다." });
-  }
-
-  const exists = dataList.some((item) => item.phone === phone);
-  if (exists) {
-    return res.status(409).json({ message: "이미 존재하는 phone입니다." });
-  }
-
-  const newData = { label, phone };
-  dataList.push(newData);
-
-  res.status(201).json(newData);
-});
-
 // 상담 내역
 app.get("/api/consult-list", (req, res) => {
-  res.json(consultList);
+  res.json(consultList1);
+});
+
+// 상담 상세
+app.get("/api/consult-list/:consultCode", (req, res) => {
+  const { consultCode } = req.params;
+  if (consultCode === "consult1") {
+    res.json(consultDetail1);
+  } else if (consultCode === "consult2") {
+    res.json(consultDetail2);
+  } else {
+    res.status(404).json({ message: "해당 상담을 찾을 수 없습니다." });
+  }
 });
 
 // 이벤트 리스트
