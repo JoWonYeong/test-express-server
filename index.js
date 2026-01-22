@@ -36,6 +36,9 @@ let regionList = [
   { regionCode: "region2", regionName: "우리가2구역 재건축정비사업 조합" },
   { regionCode: "region3", regionName: "우리가3구역 재건축정비사업 조합" },
   { regionCode: "region4", regionName: "우리가4구역 재건축정비사업 조합" },
+  { regionCode: "region5", regionName: "우리가5구역 재건축정비사업 조합" },
+  { regionCode: "region6", regionName: "우리가6구역 재건축정비사업 조합" },
+  { regionCode: "region7", regionName: "우리가7구역" },
 ];
 
 app.get("/", (req, res) => {
@@ -209,6 +212,111 @@ app.get("/api/consult-summary", (req, res) => {
 
   res.json(selectedSummary);
 });
+
+// helper: 임의 ScheduleItem 생성
+function createScheduleItem({
+  scheduleCode,
+  districtCode,
+  partnerCode,
+  partnerName,
+  partnerPhone,
+  partnerAddress,
+  scheduleType,
+  startedAt,
+  endedAt,
+  location,
+  memo,
+  createdAt,
+  lastModifiedAt,
+}) {
+  return {
+    scheduleCode,
+    districtCode,
+    partnerCode,
+    partnerName,
+    partnerPhone,
+    partnerAddress,
+    scheduleType,
+    startedAt: startedAt.toISOString(),
+    endedAt: endedAt ? endedAt.toISOString() : null,
+    location,
+    memo,
+    createdAt: createdAt.toISOString(),
+    lastModifiedAt: lastModifiedAt.toISOString(),
+  };
+}
+
+// GET /schedules
+app.get(
+  "/api/members/:memberCode/districts/:regionCode/schedules",
+  (req, res) => {
+    const { memberCode, regionCode } = req.params;
+    const { year, month, day } = req.query;
+    const onlyMonth = !day; // day 없으면 월 단위 조회
+
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const d = day ? parseInt(day) : null;
+
+    const now = new Date();
+    const items = [];
+
+    if (onlyMonth) {
+      // 월 단위: 이번달 / 저번달 / 저저번달
+      for (let i = 0; i < 3; i++) {
+        const date = new Date(now.getFullYear(), now.getMonth() - i, 10, 9, 0);
+        items.push(
+          createScheduleItem({
+            scheduleCode: 100 + i,
+            districtCode: 1,
+            partnerCode: 200 + i,
+            partnerName: `Partner ${i}`,
+            partnerPhone: "010-1234-5678",
+            partnerAddress: `Address ${i}`,
+            scheduleType: "meeting",
+            startedAt: date,
+            endedAt: new Date(date.getTime() + 3600 * 1000),
+            location: `Location ${i}`,
+            memo: `Memo ${i}`,
+            createdAt: new Date(),
+            lastModifiedAt: new Date(),
+          }),
+        );
+      }
+    } else {
+      // 일 단위: 오늘/어제/이틀 전
+      const baseDate = new Date(y, m - 1, d);
+      for (let i = 0; i < 3; i++) {
+        const date = new Date(
+          baseDate.getFullYear(),
+          baseDate.getMonth(),
+          baseDate.getDate() - i,
+          10,
+          0,
+        );
+        items.push(
+          createScheduleItem({
+            scheduleCode: 100 + i,
+            districtCode: 1,
+            partnerCode: 200 + i,
+            partnerName: `Partner ${i}`,
+            partnerPhone: "010-1234-5678",
+            partnerAddress: `Address ${i}`,
+            scheduleType: "meeting",
+            startedAt: date,
+            endedAt: new Date(date.getTime() + 3600 * 1000),
+            location: `Location ${i}`,
+            memo: `Memo ${i}`,
+            createdAt: new Date(),
+            lastModifiedAt: new Date(),
+          }),
+        );
+      }
+    }
+
+    res.json(items);
+  },
+);
 
 // 서버 실행
 app.listen(PORT, () => {
