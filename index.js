@@ -18,6 +18,11 @@ const {
   consultDetail1,
   consultDetail2,
 } = require("./consult.js");
+const {
+  createMonthlySchedule,
+  getScheduleByDate,
+  todaySchedules,
+} = require("./schedule.js");
 const express = require("express");
 const cors = require("cors");
 
@@ -213,40 +218,20 @@ app.get("/api/consult-summary", (req, res) => {
   res.json(selectedSummary);
 });
 
-// helper: 임의 ScheduleItem 생성
-function createScheduleItem({
-  scheduleCode,
-  districtCode,
-  partnerCode,
-  partnerName,
-  partnerPhone,
-  partnerAddress,
-  scheduleType,
-  startedAt,
-  endedAt,
-  location,
-  memo,
-  createdAt,
-  lastModifiedAt,
-}) {
-  return {
-    scheduleCode,
-    districtCode,
-    partnerCode,
-    partnerName,
-    partnerPhone,
-    partnerAddress,
-    scheduleType,
-    startedAt: startedAt.toISOString(),
-    endedAt: endedAt ? endedAt.toISOString() : null,
-    location,
-    memo,
-    createdAt: createdAt.toISOString(),
-    lastModifiedAt: lastModifiedAt.toISOString(),
-  };
-}
-
 // GET /schedules
+// 오늘 스케줄
+app.get(
+  "/api/members/:memberCode/districts/:regionCode/today-schedules",
+  (req, res) => {
+    const { memberCode, regionCode } = req.params;
+
+    console.log(todaySchedules);
+
+    res.json(todaySchedules);
+  },
+);
+
+// 특정 월/날짜 스케줄
 app.get(
   "/api/members/:memberCode/districts/:regionCode/schedules",
   (req, res) => {
@@ -258,61 +243,21 @@ app.get(
     const m = parseInt(month);
     const d = day ? parseInt(day) : null;
 
-    const now = new Date();
     const items = [];
 
     if (onlyMonth) {
-      // 월 단위: 이번달 / 저번달 / 저저번달
-      for (let i = 0; i < 3; i++) {
-        const date = new Date(now.getFullYear(), now.getMonth() - i, 10, 9, 0);
-        items.push(
-          createScheduleItem({
-            scheduleCode: 100 + i,
-            districtCode: 1,
-            partnerCode: 200 + i,
-            partnerName: `Partner ${i}`,
-            partnerPhone: "010-1234-5678",
-            partnerAddress: `Address ${i}`,
-            scheduleType: "meeting",
-            startedAt: date,
-            endedAt: new Date(date.getTime() + 3600 * 1000),
-            location: `Location ${i}`,
-            memo: `Memo ${i}`,
-            createdAt: new Date(),
-            lastModifiedAt: new Date(),
-          }),
-        );
-      }
+      const monthSchedule = createMonthlySchedule(y, m);
+      items.push(...monthSchedule);
     } else {
-      // 일 단위: 오늘/어제/이틀 전
-      const baseDate = new Date(y, m - 1, d);
-      for (let i = 0; i < 3; i++) {
-        const date = new Date(
-          baseDate.getFullYear(),
-          baseDate.getMonth(),
-          baseDate.getDate() - i,
-          10,
-          0,
-        );
-        items.push(
-          createScheduleItem({
-            scheduleCode: 100 + i,
-            districtCode: 1,
-            partnerCode: 200 + i,
-            partnerName: `Partner ${i}`,
-            partnerPhone: "010-1234-5678",
-            partnerAddress: `Address ${i}`,
-            scheduleType: "meeting",
-            startedAt: date,
-            endedAt: new Date(date.getTime() + 3600 * 1000),
-            location: `Location ${i}`,
-            memo: `Memo ${i}`,
-            createdAt: new Date(),
-            lastModifiedAt: new Date(),
-          }),
-        );
-      }
+      const monthSchedule = createMonthlySchedule(y, m);
+      const selectedDate = new Date(Date.UTC(y, m - 1, d));
+
+      const dateSchedule = getScheduleByDate(monthSchedule, selectedDate);
+
+      items.push(...dateSchedule);
     }
+
+    console.log(items);
 
     res.json(items);
   },
