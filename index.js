@@ -239,29 +239,32 @@ app.get(
     const { year, month, day } = req.query;
     const onlyMonth = !day; // day 없으면 월 단위 조회
 
-    const y = parseInt(year);
-    const m = parseInt(month);
-    const d = day ? parseInt(day) : null;
 
     const items = [];
 
     if (onlyMonth) {
-      const monthSchedule = createMonthlySchedule(y, m);
+      const monthSchedule = createMonthlySchedule(year, month);
       items.push(...monthSchedule);
     } else {
-      const monthSchedule = createMonthlySchedule(y, m);
-      const selectedDate = new Date(Date.UTC(y, m - 1, d));
-
-      const dateSchedule = getScheduleByDate(monthSchedule, selectedDate);
-
+      const dateSchedule = getScheduleByDate(year, month, day);
       items.push(...dateSchedule);
     }
 
-    console.log(items);
-
+  
     res.json(items);
   },
 );
+
+app.delete("/api/schedules/:scheduleCode", async (req, res) => {
+  const { scheduleCode } = req.params;
+
+    // return res.status(404).json({
+    //   message: "대상 일정을 찾을 수 없습니다",
+    // });   
+    return res.status(204).send();
+
+});
+
 
 // 서버 실행
 app.listen(PORT, () => {
